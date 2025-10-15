@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leave_management</title>
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<script src="{% static 'js/main.js' %}" defer></script>
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>Admin Portal</h2>
+  <ul>
+    <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+    <li><a href="{% url 'employees' %}">Employees</a></li>
+    <li><a href="{% url 'attendance' %}">Attendance</a></li>
+    <li><a href="{% url 'salary' %}">Salary</a></li>
+    <li><a href="{% url 'departments' %}">Departments</a></li>
+    <li><a href="{% url 'reports' %}">Reports</a></li>
+    <li><a href="{% url 'leave_management' %}">Leave Management</a></li>
+    <li><a href="{% url 'logout' %}">Logout</a></li>
+  </ul>
+</div>
+
+<div class="main-content">
+
+    <h1>Leave Management</h1>
+<div class='card'>
+  <h3>Apply for Leave</h3>
+  <form method="POST" action="{% url 'leave_management' %}">
+    {% csrf_token %}
+    <select name="employee" required>
+        <option value="">-- Select Employee --</option>
+        {% for employee in employees %}
+            <option value="{{ employee.id }}">{{ employee.name }}</option>
+        {% endfor %}
+    </select>
+    <input type='date' name="start_date" required>
+    <input type='date' name="end_date" required>
+    <select name="leave_type">
+      <option>Casual Leave</option>
+      <option>Sick Leave</option>
+      <option>Paid Leave</option>
+    </select>
+    <button type="submit">Submit</button>
+  </form>
+</div>
+<div class='card'>
+  <h3>Leave Records</h3>
+  <table>
+    <tr><th>ID</th><th>Name</th><th>Type</th><th>Status</th></tr>
+    {% for leave in leaves %}
+    <tr>
+        <td>{{ leave.id }}</td>
+        <td>{{ leave.employee.name }}</td>
+        <td>{{ leave.leave_type }}</td>
+        <td>{{ leave.status }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+    
+</div>
+</body>
+</html>
